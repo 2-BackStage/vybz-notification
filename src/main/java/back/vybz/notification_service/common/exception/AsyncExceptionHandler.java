@@ -1,4 +1,4 @@
-package back.vybz.notificationservice.common.exception;
+package back.vybz.notification_service.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;

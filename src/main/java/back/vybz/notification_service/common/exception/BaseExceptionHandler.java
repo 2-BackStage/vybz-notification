@@ -1,7 +1,7 @@
-package back.vybz.notificationservice.common.exception;
+package back.vybz.notification_service.common.exception;
 
-import back.vybz.notificationservice.common.entity.BaseResponseEntity;
-import back.vybz.notificationservice.common.entity.BaseResponseStatus;
+import back.vybz.notification_service.common.entity.BaseResponseEntity;
+import back.vybz.notification_service.common.entity.BaseResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

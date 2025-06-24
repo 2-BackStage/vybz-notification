@@ -1,4 +1,4 @@
-package back.vybz.notificationservice.notification.domain;
+package back.vybz.notification_service.notification.domain;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -46,6 +46,12 @@ public class Notifications {
     private NotificationType notificationType;
 
     /**
+     * 알림 내용
+     */
+    @Field(name = "content")
+    private String content;
+
+    /**
      * 타겟 id
      */
     @Field(name = "target_id")
@@ -68,13 +74,16 @@ public class Notifications {
     private Instant createdAt;
 
     @Builder
-    public Notifications(String senderUuid, String receiverUuid, NotificationType notificationType, String targetId) {
+    public Notifications(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String content, String targetId, boolean read, boolean deleted, Instant createdAt) {
+        this.id = id;
         this.senderUuid = senderUuid;
         this.receiverUuid = receiverUuid;
         this.notificationType = notificationType;
+        this.content = content;
         this.targetId = targetId;
-        this.read = false;
-        this.deleted = false;
+        this.read = read;
+        this.deleted = deleted;
+        this.createdAt = createdAt;
     }
 
 }

@@ -1,6 +1,6 @@
-package back.vybz.notificationservice.common.exception;
+package back.vybz.notification_service.common.exception;
 
-import back.vybz.notificationservice.common.entity.BaseResponseStatus;
+import back.vybz.notification_service.common.entity.BaseResponseStatus;
 import lombok.Getter;
 
 @Getter

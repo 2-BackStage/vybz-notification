@@ -1,4 +1,4 @@
-package back.vybz.notificationservice.common.config;
+package back.vybz.notification_service.common.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

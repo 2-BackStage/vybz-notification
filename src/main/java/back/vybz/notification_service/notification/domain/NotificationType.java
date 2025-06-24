@@ -1,4 +1,4 @@
-package back.vybz.notificationservice.notification.domain;
+package back.vybz.notification_service.notification.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

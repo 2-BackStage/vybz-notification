@@ -1,4 +1,4 @@
-package back.vybz.notificationservice.common.entity;
+package back.vybz.notification_service.common.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
