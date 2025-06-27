@@ -214,3 +214,4 @@ application-dev.yml
 application-db.yml
 !/.github/ISSUE_TEMPLATE/*.yml
 /src/main/generated/
+firebase-adminsdk.json
