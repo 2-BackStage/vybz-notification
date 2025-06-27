@@ -16,4 +16,21 @@ public enum NotificationType {
     DONATION("후원");
 
     private final String description;
+
+    public boolean isFromBusker() {
+        return switch (this) {
+            case FEED, MENTION -> true;
+            case DONATION -> false;
+            default -> false; // 그 외는 일반 유저 기본 처리
+        };
+    }
+
+    public boolean isFromUser() {
+        return switch (this) {
+            case DONATION -> true;
+            case FEED, MENTION -> false;
+            default -> true; // 나머지는 둘 다 가능 → 기본 true로 처리
+        };
+    }
+
 }

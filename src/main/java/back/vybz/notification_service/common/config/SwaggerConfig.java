@@ -29,14 +29,14 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .addServersItem(new Server().url("/notifications-service"))
+                .addServersItem(new Server().url("/notification-service"))
                 .info(apiInfo());
     }
 
     private Info apiInfo() {
         return new Info()
-                .title("VYBZ NOTIFICATIONS SERVICE 문서")
-                .description("NOTIFICATIONS SERVICE API 테스트를 위한 Swagger UI")
+                .title("VYBZ NOTIFICATION SERVICE 문서")
+                .description("NOTIFICATION SERVICE API 테스트를 위한 Swagger UI")
                 .version("1.0.0");
     }
 

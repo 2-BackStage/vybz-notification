@@ -14,7 +14,7 @@ import java.time.Instant;
 
 @Getter
 @NoArgsConstructor
-@Document(collection = "notifications")
+@Document(collection = "notification")
 @CompoundIndexes({
         // 알림 목록 조회용 인덱스 (receiver + deleted + createdAt DESC)
         @CompoundIndex(name = "idx_receiver_deleted_createdAt", def = "{'receiverUuid': 1, 'deleted': 1, 'createdAt': -1}"),
@@ -22,7 +22,7 @@ import java.time.Instant;
         // 읽지 않은 알림 카운트용 인덱스 (receiver + read + deleted)
         @CompoundIndex(name = "idx_receiver_read_deleted", def = "{'receiverUuid': 1, 'read': 1, 'deleted': 1}")
 })
-public class Notifications {
+public class Notification {
 
     @Id
     private String id;
@@ -73,8 +73,12 @@ public class Notifications {
     @Field(name = "created_at")
     private Instant createdAt;
 
+    public void markAsRead() {
+        this.read = true;
+    }
+
     @Builder
-    public Notifications(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String content, String targetId, boolean read, boolean deleted, Instant createdAt) {
+    public Notification(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String content, String targetId, boolean read, boolean deleted, Instant createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
         this.receiverUuid = receiverUuid;

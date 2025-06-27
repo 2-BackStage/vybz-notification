@@ -49,6 +49,15 @@ public enum BaseResponseStatus {
     SSE_SEND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, false, 901, "알림 전송에 실패하였습니다."),
     LOGIN_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, false, 902, "로그인에 실패하였습니다."),
 
+    /**
+     * fcm 에러
+     */
+    FCM_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, false, 1100, "FCM 토큰이 존재하지 않습니다."),
+
+    /**
+     * 알림 에러
+     */
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, false, 1200, "알림이 존재하지 않습니다."),
 
     /**
      * Request 유효성 에러

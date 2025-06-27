@@ -45,6 +45,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // fcm
     implementation 'com.google.firebase:firebase-admin:9.5.0'
+    // feignClient
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 }
 
