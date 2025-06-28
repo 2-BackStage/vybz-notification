@@ -30,6 +30,9 @@ jobs:
           # GitHub Secrets에 등록한 application.yml 내용을 복사
           echo "${{ secrets.NOTIFICATION_APPLICATION_YML }}" | base64 -d > src/main/resources/application.yml
           
+          # firebase-adminsdk.json 복원
+          echo "${{ secrets.FIREBASE_ADMINSDK_JSON }}" | base64 -d > src/main/resources/firebase-adminsdk.json
+    
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service:${{ github.sha }} .
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/notification-service:${{ github.sha }}
 
