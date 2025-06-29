@@ -11,7 +11,6 @@ public class RequestCreateNotificationVo {
     private String senderUuid;
     private String receiverUuid;
     private NotificationType notificationType;
-    private String content;
     private String targetId;
 
 }

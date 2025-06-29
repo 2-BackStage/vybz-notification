@@ -53,7 +53,6 @@ public class RequestCreateNotificationDto {
                 .senderUuid(requestCreateNotificationVo.getSenderUuid())
                 .receiverUuid(requestCreateNotificationVo.getReceiverUuid())
                 .notificationType(requestCreateNotificationVo.getNotificationType())
-                .content(requestCreateNotificationVo.getContent())
                 .targetId(requestCreateNotificationVo.getTargetId())
                 .read(false)
                 .deleted(false)
