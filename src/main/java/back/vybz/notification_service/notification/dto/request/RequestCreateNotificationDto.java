@@ -41,7 +41,6 @@ public class RequestCreateNotificationDto {
                 .senderUuid(senderUuid)
                 .receiverUuid(receiverUuid)
                 .notificationType(notificationType)
-                .content(content)
                 .targetId(targetId)
                 .read(read)
                 .deleted(deleted)

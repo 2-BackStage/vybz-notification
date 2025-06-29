@@ -1,6 +1,8 @@
 package back.vybz.notification_service.notification.dto.response;
 
-import back.vybz.notification_service.notification.domain.NotificationType;
+import back.vybz.notification_service.client.dto.UserSummary;
+import back.vybz.notification_service.common.util.FcmUrlResolver;
+import back.vybz.notification_service.common.util.NotificationContentFormatter;
 import back.vybz.notification_service.notification.domain.Notification;
 import back.vybz.notification_service.notification.vo.response.ResponseNotificationVo;
 import lombok.Builder;
@@ -16,35 +18,37 @@ public class ResponseNotificationDto {
 
     private String id;
     private String senderUuid;
-    private String receiverUuid;
-    private NotificationType notificationType;
-    private String targetId;
+    private String senderNickname;
+    private String senderProfileImageUrl;
     private String content;
+    private String targetUrl;
     private boolean read;
     private ZonedDateTime createdAt;
 
     @Builder
-    public ResponseNotificationDto(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String targetId, String content, boolean read, ZonedDateTime createdAt) {
+    public ResponseNotificationDto(String id, String senderUuid, String senderNickname, String senderProfileImageUrl, String content, String targetUrl, boolean read, ZonedDateTime createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
-        this.receiverUuid = receiverUuid;
-        this.notificationType = notificationType;
-        this.targetId = targetId;
+        this.senderNickname = senderNickname;
+        this.senderProfileImageUrl = senderProfileImageUrl;
         this.content = content;
+        this.targetUrl = targetUrl;
         this.read = read;
         this.createdAt = createdAt;
     }
 
-    public static ResponseNotificationDto from(Notification notification) {
-        ZonedDateTime kstTime = notification.getCreatedAt()
-                .atZone(ZoneId.of("Asia/Seoul"));
+    public static ResponseNotificationDto from(Notification notification, UserSummary sender, FcmUrlResolver fcmUrlResolver) {
+        ZonedDateTime kstTime = notification.getCreatedAt().atZone(ZoneId.of("Asia/Seoul"));
+        String content = NotificationContentFormatter.format(notification.getNotificationType(), sender.getNickname());
+        String targetUrl = fcmUrlResolver.resolveUrl(notification.getNotificationType(), notification.getTargetId());
+
         return ResponseNotificationDto.builder()
                 .id(notification.getId())
-                .senderUuid(notification.getSenderUuid())
-                .receiverUuid(notification.getReceiverUuid())
-                .notificationType(notification.getNotificationType())
-                .targetId(notification.getTargetId())
-                .content(notification.getContent())
+                .senderUuid(sender.getUuid())
+                .senderNickname(sender.getNickname())
+                .senderProfileImageUrl(sender.getProfileImageUrl())
+                .content(content)
+                .targetUrl(targetUrl)
                 .read(notification.isRead())
                 .createdAt(kstTime)
                 .build();
@@ -54,10 +58,10 @@ public class ResponseNotificationDto {
         return ResponseNotificationVo.builder()
                 .id(id)
                 .senderUuid(senderUuid)
-                .receiverUuid(receiverUuid)
-                .notificationType(notificationType)
-                .targetId(targetId)
+                .senderNickname(senderNickname)
+                .senderProfileImageUrl(senderProfileImageUrl)
                 .content(content)
+                .targetUrl(targetUrl)
                 .read(read)
                 .createdAt(createdAt)
                 .build();

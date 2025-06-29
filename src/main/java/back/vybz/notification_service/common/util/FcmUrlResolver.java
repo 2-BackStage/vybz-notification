@@ -12,11 +12,10 @@ public class FcmUrlResolver {
     @Value("${fcm.base-url}")
     private String baseUrl;
 
-    // TODO 프론트 url 확인 후 수정
     public String resolveUrl(NotificationType notificationType, String targetId) {
         return switch (notificationType) {
             case LIKE, FEED, COMMENT, MENTION -> baseUrl + "/feed/" + targetId;
-            case FOLLOW -> baseUrl + "/profile/" + targetId;
+            case FOLLOW -> baseUrl + "/user/" + targetId;
             case SYSTEM -> baseUrl + "/system";
             case CHAT -> baseUrl + "/chat/" + targetId;
             case DONATION -> baseUrl + "/donation/" + targetId;

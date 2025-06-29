@@ -1,8 +1,5 @@
 package back.vybz.notification_service.notification.presentation;
 
-import back.vybz.notification_service.client.BuskerInfoClient;
-import back.vybz.notification_service.client.UserInfoClient;
-import back.vybz.notification_service.client.dto.UserSummary;
 import back.vybz.notification_service.common.entity.BaseResponseEntity;
 import back.vybz.notification_service.common.entity.BaseResponseStatus;
 import back.vybz.notification_service.common.util.CursorPageUtil;
