@@ -15,6 +15,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -31,40 +33,47 @@ public class ChatNotificationEventConsumer {
             groupId = "chat-notification-group",
             containerFactory = "chatNotificationKafkaListenerContainerFactory"
     )
-    public void consume(ChatNotificationEvent event) {
-        log.info("📨 Kafka에서 알림 이벤트 수신: {}", event);
+    public void consume(List<ChatNotificationEvent> events) {
+        log.info("📨 Kafka에서 알림 이벤트 수신: {}", events);
 
-//        UserSummary sender = null;
+        Set<String> senderUuids = events.stream()
+                .map(ChatNotificationEvent::getSenderUuid)
+                .collect(Collectors.toSet());
 
-//        try {
-//            // 1. 우선 user로 조회 시도
-//            sender = userInfoClient.getUserSummary(event.getSenderUuid());
-//        } catch (Exception userEx) {
-//            log.warn("🔍 일반 유저 정보 조회 실패, 버스커 조회 시도 (uuid: {})", event.getSenderUuid());
-//            try {
-//                sender = buskerInfoClient.getBuskerSummary(event.getSenderUuid());
-//            } catch (Exception buskerEx) {
-//                log.error("🚨 유저/버스커 모두 조회 실패 (uuid: {})", event.getSenderUuid(), buskerEx);
-//                return;
-//            }
-//        }
-//
-//        String content = NotificationContentFormatter.format(NotificationType.CHAT, sender.getNickname());
+        // 1. userInfo, buskerInfo에서 각각 bulk 조회
+        Map<String, UserSummary> userInfoMap = userInfoClient.getUserSummaryBulk(new ArrayList<>(senderUuids));
+        Map<String, UserSummary> buskerInfoMap = buskerInfoClient.getUserSummaryBulk(new ArrayList<>(senderUuids));
 
-        RequestCreateNotificationDto dto = RequestCreateNotificationDto
-                .builder()
-                .senderUuid(event.getSenderUuid())
-                .receiverUuid(event.getReceiverUuid())
-                .notificationType(NotificationType.CHAT)
-                .targetId(fcmUrlResolver.resolveUrl(NotificationType.CHAT, event.getChatRoomId()))
-                .read(false)
-                .deleted(false)
-                .createdAt(Instant.now())
-                .build();
+        // 2. 병합 (user 우선, 없으면 busker)
+        Map<String, UserSummary> merged = new HashMap<>(buskerInfoMap);
+        merged.putAll(userInfoMap);
 
-        notificationService.sendNotification(dto);
-        log.info("📨 채팅 알림 저장 완료: receiver={}, sender={}", event.getReceiverUuid(), event.getSenderUuid());
+        // 3. 알림 생성
+        for (ChatNotificationEvent event : events) {
+            UserSummary sender = merged.get(event.getSenderUuid());
+            if (sender == null) {
+                log.warn("🚨 sender 정보 없음: uuid={}", event.getSenderUuid());
+                continue;
+            }
 
+            String content = NotificationContentFormatter.format(NotificationType.CHAT, sender.getNickname());
+
+            RequestCreateNotificationDto dto = RequestCreateNotificationDto
+                    .builder()
+                    .senderUuid(event.getSenderUuid())
+                    .receiverUuid(event.getReceiverUuid())
+                    .notificationType(NotificationType.CHAT)
+                    .content(content)
+                    .targetId(fcmUrlResolver.resolveUrl(NotificationType.CHAT, event.getChatRoomId()))
+                    .read(false)
+                    .deleted(false)
+                    .createdAt(Instant.now())
+                    .build();
+
+            notificationService.sendNotification(dto);
+            log.info("📨 채팅 알림 저장 완료: receiver={}, sender={}", event.getReceiverUuid(), event.getSenderUuid());
+
+        }
     }
 
 }
