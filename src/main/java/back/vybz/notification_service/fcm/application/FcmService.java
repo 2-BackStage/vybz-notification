@@ -1,9 +1,8 @@
 package back.vybz.notification_service.fcm.application;
 
-import back.vybz.notification_service.fcm.dto.response.ResponseFcmTokenDto;
-import back.vybz.notification_service.kafka.event.NotificationEvent;
-import back.vybz.notification_service.notification.domain.NotificationType;
 import back.vybz.notification_service.fcm.dto.request.RequestFcmTokenDto;
+import back.vybz.notification_service.fcm.dto.response.ResponseFcmTokenDto;
+import back.vybz.notification_service.notification.domain.NotificationType;
 
 public interface FcmService {
 

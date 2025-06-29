@@ -3,7 +3,6 @@ package back.vybz.notification_service.fcm.application;
 import back.vybz.notification_service.common.entity.BaseResponseStatus;
 import back.vybz.notification_service.common.exception.BaseException;
 import back.vybz.notification_service.common.util.FcmSenderUtil;
-import back.vybz.notification_service.common.util.FcmUrlResolver;
 import back.vybz.notification_service.fcm.domain.FcmToken;
 import back.vybz.notification_service.fcm.dto.request.RequestFcmTokenDto;
 import back.vybz.notification_service.fcm.dto.response.ResponseFcmTokenDto;
@@ -22,7 +21,6 @@ public class FcmServiceImpl implements FcmService {
 
     private final FcmTokenRepository fcmTokenRepository;
     private final FcmSenderUtil fcmSenderUtil;
-    private final FcmUrlResolver fcmUrlResolver;
 
     /**
      * FCM 알림 전송
@@ -35,17 +33,12 @@ public class FcmServiceImpl implements FcmService {
     public void sendFcm(String receiverUuid, NotificationType type, String content, String targetId) {
         FcmToken fcmToken = fcmTokenRepository.findByReceiverUuid(receiverUuid)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.FCM_TOKEN_NOT_FOUND));
-        String url = fcmUrlResolver.resolveUrl(type, targetId);
         try {
             fcmSenderUtil.send(
                     fcmToken.getToken(),
-                    type.getDescription(),
+                    "VYBZ 알림",
                     content,
-                    Map.of(
-                            "url", url,
-                            "content", content,
-                            "type", type.name(),
-                            "targetId", targetId)
+                    Map.of("targetId", targetId)
             );
             log.info("📨 FCM 전송 완료: receiver={}, type={}, targetId={}", receiverUuid, type, targetId);
         } catch (Exception e) {

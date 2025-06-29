@@ -1,6 +1,5 @@
 package back.vybz.notification_service.kafka.event;
 
-import back.vybz.notification_service.notification.domain.NotificationType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

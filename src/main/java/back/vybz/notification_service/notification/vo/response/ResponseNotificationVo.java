@@ -13,21 +13,22 @@ public class ResponseNotificationVo {
 
     private String id;
     private String senderUuid;
-    private String receiverUuid;
-    private NotificationType notificationType;
-    private String targetId;
+    private String senderNickname;
+    private String senderProfileImageUrl;
     private String content;
+    private String targetUrl;
     private boolean read;
     private ZonedDateTime createdAt;
 
     @Builder
-    public ResponseNotificationVo(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String targetId, String content, boolean read, ZonedDateTime createdAt) {
+    public ResponseNotificationVo(String id, String senderUuid, String senderNickname, String senderProfileImageUrl,
+                                  String content, String targetUrl, boolean read, ZonedDateTime createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
-        this.receiverUuid = receiverUuid;
-        this.notificationType = notificationType;
-        this.targetId = targetId;
+        this.senderNickname = senderNickname;
+        this.senderProfileImageUrl = senderProfileImageUrl;
         this.content = content;
+        this.targetUrl = targetUrl;
         this.read = read;
         this.createdAt = createdAt;
     }
