@@ -31,19 +31,22 @@ public class FcmServiceImpl implements FcmService {
      */
     @Override
     public void sendFcm(String receiverUuid, NotificationType type, String content, String targetId) {
-        FcmToken fcmToken = fcmTokenRepository.findByReceiverUuid(receiverUuid)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.FCM_TOKEN_NOT_FOUND));
-        try {
-            fcmSenderUtil.send(
-                    fcmToken.getToken(),
-                    "VYBZ 알림",
-                    content,
-                    Map.of("targetId", targetId)
-            );
-            log.info("📨 FCM 전송 완료: receiver={}, type={}, targetId={}", receiverUuid, type, targetId);
-        } catch (Exception e) {
-            log.error("🚨 FCM 전송 실패: {}", e.getMessage(), e);
-        }
+        fcmTokenRepository.findByReceiverUuid(receiverUuid).ifPresentOrElse(
+                fcmToken -> {
+                    try {
+                        fcmSenderUtil.send(
+                                fcmToken.getToken(),
+                                "VYBZ 알림",
+                                content,
+                                Map.of("targetId", targetId)
+                        );
+                        log.info("📨 FCM 전송 완료: receiver={}, type={}, targetId={}", receiverUuid, type, targetId);
+                    } catch (Exception e) {
+                        log.error("🚨 FCM 전송 실패: {}", e.getMessage(), e);
+                    }
+                },
+                () -> log.warn("⚠️ FCM 토큰 없음: receiver={}", receiverUuid)
+        );
     }
 
     /**
