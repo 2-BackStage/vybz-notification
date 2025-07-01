@@ -46,6 +46,12 @@ public class Notification {
     private NotificationType notificationType;
 
     /**
+     * 알림 내용
+     */
+    @Field(name = "content")
+    private String content;
+
+    /**
      * 타겟 id
      */
     @Field(name = "target_id")
@@ -72,11 +78,12 @@ public class Notification {
     }
 
     @Builder
-    public Notification(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String targetId, boolean read, boolean deleted, Instant createdAt) {
+    public Notification(String id, String senderUuid, String receiverUuid, NotificationType notificationType, String content, String targetId, boolean read, boolean deleted, Instant createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
         this.receiverUuid = receiverUuid;
         this.notificationType = notificationType;
+        this.content = content;
         this.targetId = targetId;
         this.read = read;
         this.deleted = deleted;

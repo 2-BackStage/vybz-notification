@@ -56,7 +56,8 @@ public class ChatNotificationEventConsumer {
                 continue;
             }
 
-            String content = NotificationContentFormatter.format(NotificationType.CHAT, sender.getNickname());
+            String content = NotificationContentFormatter.format(
+                    NotificationType.CHAT, sender.getNickname() + "\n" + event.getContent());
 
             RequestCreateNotificationDto dto = RequestCreateNotificationDto
                     .builder()
