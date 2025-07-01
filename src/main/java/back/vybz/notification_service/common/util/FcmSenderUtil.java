@@ -12,12 +12,11 @@ public class FcmSenderUtil {
 
     public void send(String fcmToken, String title, String body, Map<String, String> data) {
         try {
+            data.put("title", title);
+            data.put("body", body);
+
             Message message = Message.builder()
                     .setToken(fcmToken)
-                    .setNotification(Notification.builder()
-                            .setTitle(title)
-                            .setBody(body)
-                            .build())
                     .putAllData(data)
                     .setAndroidConfig(AndroidConfig.builder()
                             .setPriority(AndroidConfig.Priority.HIGH)
