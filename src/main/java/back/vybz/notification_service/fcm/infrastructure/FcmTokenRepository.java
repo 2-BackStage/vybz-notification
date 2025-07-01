@@ -13,4 +13,5 @@ public interface FcmTokenRepository extends MongoRepository<FcmToken, String> {
      */
     Optional<FcmToken> findByReceiverUuid(String receiverUuid);
 
+    Optional<Object> findByToken(String fcmTokenValue);
 }
