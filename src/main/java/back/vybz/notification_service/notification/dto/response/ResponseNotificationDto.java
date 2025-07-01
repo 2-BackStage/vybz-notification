@@ -21,20 +21,18 @@ public class ResponseNotificationDto {
     private String senderNickname;
     private String senderProfileImageUrl;
     private String content;
-    private String subContent;
     private String targetUrl;
     private boolean read;
     private ZonedDateTime createdAt;
 
     @Builder
     public ResponseNotificationDto(String id, String senderUuid, String senderNickname, String senderProfileImageUrl,
-                                   String content, String subContent, String targetUrl, boolean read, ZonedDateTime createdAt) {
+                                   String content, String targetUrl, boolean read, ZonedDateTime createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
         this.senderNickname = senderNickname;
         this.senderProfileImageUrl = senderProfileImageUrl;
         this.content = content;
-        this.subContent = subContent;
         this.targetUrl = targetUrl;
         this.read = read;
         this.createdAt = createdAt;
@@ -51,7 +49,6 @@ public class ResponseNotificationDto {
                 .senderNickname(sender.getNickname())
                 .senderProfileImageUrl(sender.getProfileImageUrl())
                 .content(content)
-                .subContent(notification.getSubContent())
                 .targetUrl(targetUrl)
                 .read(notification.isRead())
                 .createdAt(kstTime)
@@ -65,7 +62,6 @@ public class ResponseNotificationDto {
                 .senderNickname(senderNickname)
                 .senderProfileImageUrl(senderProfileImageUrl)
                 .content(content)
-                .subContent(subContent)
                 .targetUrl(targetUrl)
                 .read(read)
                 .createdAt(createdAt)
