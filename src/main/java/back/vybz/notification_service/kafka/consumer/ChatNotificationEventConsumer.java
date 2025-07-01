@@ -56,8 +56,7 @@ public class ChatNotificationEventConsumer {
                 continue;
             }
 
-            String content = NotificationContentFormatter.format(
-                    NotificationType.CHAT, sender.getNickname() + "\n" + event.getContent());
+            String content = NotificationContentFormatter.format(NotificationType.CHAT, sender.getNickname());
 
             RequestCreateNotificationDto dto = RequestCreateNotificationDto
                     .builder()
@@ -65,6 +64,7 @@ public class ChatNotificationEventConsumer {
                     .receiverUuid(event.getReceiverUuid())
                     .notificationType(NotificationType.CHAT)
                     .content(content)
+                    .subContent(event.getContent())
                     .targetId(fcmUrlResolver.resolveUrl(NotificationType.CHAT, event.getChatRoomId()))
                     .read(false)
                     .deleted(false)

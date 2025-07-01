@@ -17,17 +17,21 @@ public class RequestCreateNotificationDto {
     private String receiverUuid;
     private NotificationType notificationType;
     private String content;
+    private String subContent;
     private String targetId;
     private boolean read;
     private boolean deleted;
     private Instant createdAt;
 
     @Builder
-    public RequestCreateNotificationDto(String senderUuid, String receiverUuid, NotificationType notificationType, String content, String targetId, boolean read, boolean deleted, Instant createdAt) {
+    public RequestCreateNotificationDto(String senderUuid, String receiverUuid, NotificationType notificationType,
+                                        String content, String subContent, String targetId, boolean read,
+                                        boolean deleted, Instant createdAt) {
         this.senderUuid = senderUuid;
         this.receiverUuid = receiverUuid;
         this.notificationType = notificationType;
         this.content = content;
+        this.subContent = subContent;
         this.targetId = targetId;
         this.read = read;
         this.deleted = deleted;
@@ -40,6 +44,7 @@ public class RequestCreateNotificationDto {
                 .receiverUuid(receiverUuid)
                 .notificationType(notificationType)
                 .content(content)
+                .subContent(subContent)
                 .targetId(targetId)
                 .read(read)
                 .deleted(deleted)
