@@ -1,9 +1,7 @@
 package back.vybz.notification_service.notification.dto.request;
 
-import back.vybz.notification_service.common.util.NotificationContentFormatter;
-import back.vybz.notification_service.kafka.event.NotificationEvent;
-import back.vybz.notification_service.notification.domain.NotificationType;
 import back.vybz.notification_service.notification.domain.Notification;
+import back.vybz.notification_service.notification.domain.NotificationType;
 import back.vybz.notification_service.notification.vo.request.RequestCreateNotificationVo;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +39,7 @@ public class RequestCreateNotificationDto {
                 .senderUuid(senderUuid)
                 .receiverUuid(receiverUuid)
                 .notificationType(notificationType)
+                .content(content)
                 .targetId(targetId)
                 .read(read)
                 .deleted(deleted)
