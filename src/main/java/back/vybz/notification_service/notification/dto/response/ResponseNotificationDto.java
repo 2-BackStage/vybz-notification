@@ -61,7 +61,6 @@ public class ResponseNotificationDto {
                 .senderUuid(senderUuid)
                 .senderNickname(senderNickname)
                 .senderProfileImageUrl(senderProfileImageUrl)
-                .content(content)
                 .targetUrl(targetUrl)
                 .read(read)
                 .createdAt(createdAt)
