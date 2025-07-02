@@ -15,17 +15,19 @@ public class ResponseNotificationVo {
     private String senderUuid;
     private String senderNickname;
     private String senderProfileImageUrl;
+    private String content;
     private String targetUrl;
     private boolean read;
     private ZonedDateTime createdAt;
 
     @Builder
     public ResponseNotificationVo(String id, String senderUuid, String senderNickname, String senderProfileImageUrl,
-                                  String targetUrl, boolean read, ZonedDateTime createdAt) {
+                                  String content, String targetUrl, boolean read, ZonedDateTime createdAt) {
         this.id = id;
         this.senderUuid = senderUuid;
         this.senderNickname = senderNickname;
         this.senderProfileImageUrl = senderProfileImageUrl;
+        this.content = content;
         this.targetUrl = targetUrl;
         this.read = read;
         this.createdAt = createdAt;
