@@ -1,6 +1,6 @@
-# VYBZ Follow Service
+# VYBZ Notification Service
 
-VYBZ 플랫폼의 팔로우 기능을 담당하는 마이크로서비스입니다.
+VYBZ 플랫폼의 알림 기능을 담당하는 마이크로서비스입니다.
 
 ## 📋 목차
 
@@ -16,15 +16,16 @@ VYBZ 플랫폼의 팔로우 기능을 담당하는 마이크로서비스입니�
 
 ## 🎯 개요
 
-VYBZ Follow Service는 다음과 같은 기능을 제공합니다:
+VYBZ Notification Service는 다음과 같은 기능을 제공합니다:
 
--   **팔로우 관리**: 사용자와 버스커 간의 팔로우 관계 관리
--   **팔로워/팔로잉 조회**: 사용자별 팔로잉 목록, 버스커별 팔로워 목록 조회
--   **팔로우 상태 확인**: 사용자의 특정 버스커 팔로우 여부 확인
--   **API 제공**: 팔로우 관련 REST API 제공
+-   **알림 관리**: 다양한 타입의 알림 생성, 조회, 읽음 처리, 삭제
+-   **FCM 토큰 관리**: 사용자별 FCM 토큰 저장 및 관리
+-   **푸시 알림**: Firebase Cloud Messaging을 통한 실시간 푸시 알림
+-   **이벤트 기반 알림**: Kafka를 통한 비동기 이벤트 처리
+-   **API 제공**: 알림 관련 REST API 제공
 -   **서비스 디스커버리**: Eureka Client를 통한 서비스 등록
 -   **API 문서화**: Swagger를 통한 API 문서 제공
--   **이벤트 기반 통신**: Kafka를 통한 비동기 이벤트 처리
+-   **외부 서비스 연동**: Feign Client를 통한 다른 서비스와의 통신
 
 ## 🛠 기술 스택
 
@@ -35,8 +36,10 @@ VYBZ Follow Service는 다음과 같은 기능을 제공합니다:
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 ![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
 ### Infra
 
@@ -53,12 +56,17 @@ VYBZ Follow Service는 다음과 같은 기능을 제공합니다:
 
 ### Database
 
--   **MongoDB**: 팔로우 관계 데이터 저장 (Read Model)
--   **MySQL**: 팔로우 관계 데이터 저장 (Write Model)
+-   **MongoDB**: 알림 데이터 저장 (Read Model)
+-   **MySQL**: 알림 데이터 저장 (Write Model)
+-   **Redis**: 캐싱 및 세션 관리
 
 ### Message Queue
 
 -   **Apache Kafka**: 비동기 이벤트 처리 및 서비스 간 통신
+
+### Push Notification
+
+-   **Firebase Cloud Messaging (FCM)**: 실시간 푸시 알림 전송
 
 ### Documentation
 
@@ -71,33 +79,33 @@ VYBZ Follow Service는 다음과 같은 기능을 제공합니다:
 
 ## 🚀 주요 기능
 
-### 1. 팔로우 관리
+### 1. 알림 관리
 
--   **팔로우 추가**: 사용자가 버스커를 팔로우
--   **팔로우 삭제**: 사용자가 버스커 언팔로우
--   **팔로우 상태 확인**: 특정 사용자의 버스커 팔로우 여부 확인
+-   **알림 생성**: 다양한 타입의 알림 생성 (좋아요, 댓글, 피드, 팔로우, 멘션, 시스템, 채팅, 후원)
+-   **알림 조회**: 수신자별 알림 목록 조회 (커서 기반 페이징)
+-   **알림 읽음 처리**: 개별 알림 읽음 상태 변경
+-   **알림 삭제**: 개별 알림 삭제
 
-### 2. 팔로워/팔로잉 조회
+### 2. FCM 토큰 관리
 
--   **팔로잉 목록 조회**: 사용자가 팔로우하는 버스커 목록 조회
--   **팔로워 목록 조회**: 버스커를 팔로우하는 사용자 목록 조회
--   **커서 기반 페이징**: 효율적인 페이징 처리
+-   **토큰 저장/업데이트**: 사용자별 FCM 토큰 저장 및 업데이트
+-   **토큰 조회**: 수신자 UUID로 FCM 토큰 조회
+-   **푸시 알림 전송**: FCM을 통한 실시간 푸시 알림
 
-### 3. 사용자 정보 동기화
+### 3. 이벤트 기반 알림
 
--   **팔로워 정보 업데이트**: 사용자 정보 변경 시 팔로워 목록 업데이트
--   **팔로잉 정보 업데이트**: 버스커 정보 변경 시 팔로잉 목록 업데이트
-
-### 4. 이벤트 기반 통신
-
--   **Kafka Producer**: 팔로우 이벤트 발행
--   **Kafka Consumer**: 사용자 정보 변경 이벤트 수신
--   **비동기 처리**: 이벤트 기반 비동기 데이터 처리
+-   **Kafka Consumer**: 다른 서비스의 이벤트 수신 및 알림 생성
+-   **비동기 처리**: 이벤트 기반 비동기 알림 처리
 -   **이벤트 타입**:
-    -   FollowEvent (팔로우 생성)
-    -   UnfollowEvent (팔로우 삭제)
-    -   FollowerEvent (팔로워 정보 업데이트)
-    -   FollowingEvent (팔로잉 정보 업데이트)
+    -   ChatNotificationEvent (채팅 메시지 알림)
+    -   FollowNotificationEvent (팔로우 알림)
+    -   NotificationEvent (일반 알림)
+
+### 4. 외부 서비스 연동
+
+-   **Feign Client**: 다른 마이크로서비스와의 HTTP 통신
+-   **User Info Service**: 사용자 정보 조회
+-   **Busker Info Service**: 버스커 정보 조회
 
 ### 5. API 제공
 
@@ -113,116 +121,122 @@ VYBZ Follow Service는 다음과 같은 기능을 제공합니다:
 ## 📁 프로젝트 구조
 
 ```
-src/main/java/com/vybz/follow_service/
-├── follow/                    # 팔로우 도메인
-│   ├── application/           # 팔로우 서비스 로직
-│   │   ├── FollowService.java
-│   │   └── FollowServiceImpl.java
-│   ├── domain/                # 팔로우 도메인 모델
-│   │   ├── Follow.java
-│   │   ├── Follower.java
-│   │   └── Following.java
-│   ├── dto/                   # 팔로우 DTO
+src/main/java/back/vybz/notification_service/
+├── notification/               # 알림 도메인
+│   ├── application/            # 알림 서비스 로직
+│   │   ├── NotificationService.java
+│   │   └── NotificationServiceImpl.java
+│   ├── domain/                 # 알림 도메인 모델
+│   │   ├── Notification.java
+│   │   └── NotificationType.java
+│   ├── dto/                    # 알림 DTO
 │   │   ├── request/
-│   │   │   ├── RequestAddFollowDto.java
-│   │   │   ├── RequestDeleteFollowDto.java
-│   │   │   ├── RequestUpdateFollowerDto.java
-│   │   │   └── RequestUpdateFollowingDto.java
+│   │   │   └── RequestCreateNotificationDto.java
 │   │   └── response/
-│   │       ├── ResponseBuskerFollowerDto.java
-│   │       └── ResponseUserFollowingDto.java
-│   ├── infrastructure/        # 팔로우 리포지토리
-│   │   ├── FollowRepository.java
-│   │   ├── FollowRepositoryCustom.java
-│   │   └── FollowRepositoryCustomImpl.java
-│   ├── presentation/          # 팔로우 컨트롤러
-│   │   └── FollowController.java
-│   └── vo/                    # 팔로우 VO
+│   │       └── ResponseNotificationDto.java
+│   ├── infrastructure/         # 알림 리포지토리
+│   │   ├── NotificationRepository.java
+│   │   ├── NotificationRepositoryCustom.java
+│   │   └── NotificationRepositoryCustomImpl.java
+│   ├── presentation/           # 알림 컨트롤러
+│   │   └── NotificationController.java
+│   └── vo/                     # 알림 VO
 │       ├── request/
-│       │   ├── RequestAddFollowVo.java
-│       │   ├── RequestDeleteFollowVo.java
-│       │   ├── RequestUpdateFollowerVo.java
-│       │   └── RequestUpdateFollowingVo.java
+│       │   └── RequestCreateNotificationVo.java
 │       └── response/
-│           ├── ResponseBuskerFollowerVo.java
-│           └── ResponseUserFollowingVo.java
-├── common/                    # 공통 모듈
-│   ├── config/                # 설정 클래스들
+│           └── ResponseNotificationVo.java
+├── fcm/                        # FCM 도메인
+│   ├── application/            # FCM 서비스 로직
+│   │   ├── FcmService.java
+│   │   └── FcmServiceImpl.java
+│   ├── domain/                 # FCM 도메인 모델
+│   │   └── FcmToken.java
+│   ├── dto/                    # FCM DTO
+│   │   ├── request/
+│   │   │   └── RequestFcmTokenDto.java
+│   │   └── response/
+│   │       └── ResponseFcmTokenDto.java
+│   ├── infrastructure/         # FCM 리포지토리
+│   │   └── FcmTokenRepository.java
+│   ├── presentation/           # FCM 컨트롤러
+│   │   └── FcmTokenController.java
+│   └── vo/                     # FCM VO
+│       └── response/
+│           └── ResponseFcmTokenVo.java
+├── client/                     # 외부 서비스 클라이언트
+│   ├── BuskerInfoClient.java
+│   ├── UserInfoClient.java
+│   └── dto/
+│       └── UserSummary.java
+├── common/                     # 공통 모듈
+│   ├── config/                 # 설정 클래스들
+│   │   ├── FirebaseConfig.java
 │   │   ├── MongoConfig.java
 │   │   └── SwaggerConfig.java
-│   ├── entity/                # 공통 엔티티
-│   │   ├── BaseEntity.java
+│   ├── entity/                 # 공통 엔티티
 │   │   ├── BaseResponseEntity.java
-│   │   ├── BaseResponseStatus.java
-│   │   └── SoftDeletableEntity.java
-│   ├── exception/             # 예외 처리
+│   │   └── BaseResponseStatus.java
+│   ├── exception/              # 예외 처리
 │   │   ├── AsyncExceptionHandler.java
 │   │   ├── BaseException.java
 │   │   ├── BaseExceptionHandler.java
 │   │   └── BaseExceptionHandlerFilter.java
-│   └── util/                  # 유틸리티
+│   └── util/                   # 유틸리티
 │       ├── CursorPageUtil.java
-│       └── MongoCursorPageHelper.java
-├── kafka/                     # Kafka 관련 모듈
-│   ├── config/                # Kafka 설정
+│       ├── FcmSenderUtil.java
+│       ├── FcmUrlResolver.java
+│       ├── MongoCursorPageHelper.java
+│       └── NotificationContentFormatter.java
+├── kafka/                      # Kafka 관련 모듈
+│   ├── config/                 # Kafka 설정
 │   │   ├── CommonKafkaConfig.java
-│   │   ├── FollowerKafkaConfig.java
-│   │   ├── FollowingKafkaConfig.java
-│   │   ├── FollowKafkaConfig.java
-│   │   └── UnfollowKafkaConfig.java
-│   ├── consumer/              # Kafka Consumer
-│   │   ├── DeleteFollowerEventConsumer.java
-│   │   ├── DeleteFollowingEventConsumer.java
-│   │   ├── UpdateFollowerEventConsumer.java
-│   │   └── UpdateFollowingEventConsumer.java
-│   ├── event/                 # Kafka 이벤트
-│   │   ├── FollowerEvent.java
-│   │   ├── FollowEvent.java
-│   │   ├── FollowingEvent.java
-│   │   └── UnfollowEvent.java
-│   └── producer/              # Kafka Producer
-│       ├── FollowKafkaProducer.java
-│       └── UnfollowKafkaProducer.java
-└── FollowServiceApplication.java
+│   │   └── NotificationKafkaConfig.java
+│   ├── consumer/               # Kafka Consumer
+│   │   ├── ChatNotificationEventConsumer.java
+│   │   └── FollowNotificationEventConsumer.java
+│   └── event/                  # Kafka 이벤트
+│       ├── ChatNotificationEvent.java
+│       ├── FollowNotificationEvent.java
+│       └── NotificationEvent.java
+└── NotificationServiceApplication.java
 ```
 
 ## 📚 API 문서
 
 Swagger UI를 통해 API 문서를 확인할 수 있습니다:
 
--   **URL**: `http://localhost:8000/follow-service/swagger-ui.html`
--   **API 그룹**: Follow-Service
+-   **URL**: `http://localhost:8000/notification-service/swagger-ui.html`
+-   **API 그룹**: Notification-Service, FCM-Service
 
 ### 주요 API 엔드포인트
 
-#### 팔로우 관리 API
+#### 알림 관리 API
 
--   `POST /api/v1/follow` - 팔로우 추가
--   `DELETE /api/v1/follow` - 팔로우 삭제
--   `GET /api/v1/follow/check` - 팔로우 여부 확인
+-   `POST /api/v1/notification` - 알림 생성
+-   `GET /api/v1/notification/search` - 수신자별 알림 목록 조회
+-   `PUT /api/v1/notification/{notificationId}` - 알림 읽음 처리
+-   `DELETE /api/v1/notification/{notificationId}` - 알림 삭제
 
-#### 팔로잉/팔로워 조회 API
+#### FCM 토큰 관리 API
 
--   `GET /api/v1/follow/following-list` - 사용자 팔로잉 목록 조회
--   `GET /api/v1/follow/follower-list` - 버스커 팔로워 목록 조회
-
-#### 정보 업데이트 API
-
--   `PUT /api/v1/follow/follower` - 팔로워 정보 업데이트
--   `PUT /api/v1/follow/following` - 팔로잉 정보 업데이트
+-   `POST /api/v1/fcm-token` - FCM 토큰 저장/업데이트
+-   `GET /api/v1/fcm-token/{receiverUuid}` - FCM 토큰 조회
 
 ### API 요청/응답 예시
 
-#### 팔로우 추가 요청
+#### 알림 생성 요청
 
 ```json
 {
-    "userUuid": "user-123",
-    "buskerUuid": "busker-456"
+    "senderUuid": "user-123",
+    "receiverUuid": "user-456",
+    "notificationType": "FOLLOW",
+    "content": "님이 회원님을 팔로우했습니다.",
+    "targetId": "user-123"
 }
 ```
 
-#### 팔로잉 목록 조회 응답
+#### 알림 목록 조회 응답
 
 ```json
 {
@@ -231,9 +245,15 @@ Swagger UI를 통해 API 문서를 확인할 수 있습니다:
     "data": {
         "content": [
             {
-                "buskerUuid": "busker-456",
-                "nickname": "스트리트뮤지션",
-                "profileImageUrl": "https://example.com/profile.jpg"
+                "notificationId": "notif-123",
+                "senderUuid": "user-123",
+                "receiverUuid": "user-456",
+                "notificationType": "FOLLOW",
+                "content": "님이 회원님을 팔로우했습니다.",
+                "targetId": "user-123",
+                "read": false,
+                "deleted": false,
+                "createdAt": "2024-01-01T12:00:00Z"
             }
         ],
         "hasNext": true,
@@ -251,14 +271,16 @@ Swagger UI를 통해 API 문서를 확인할 수 있습니다:
 -   Docker (선택사항)
 -   MongoDB
 -   MySQL
+-   Redis
 -   Apache Kafka
+-   Firebase Admin SDK
 
 ### 2. 로컬 실행
 
 ```bash
 # 프로젝트 클론
 git clone <repository-url>
-cd vybz-follow-service
+cd vybz-notification-service
 
 # Gradle 빌드
 ./gradlew clean build
@@ -271,10 +293,10 @@ cd vybz-follow-service
 
 ```bash
 # Docker 이미지 빌드
-docker build -t vybz-follow-service .
+docker build -t vybz-notification-service .
 
 # Docker 컨테이너 실행
-docker run -p 8000:8000 vybz-follow-service
+docker run -p 8000:8000 vybz-notification-service
 ```
 
 ## ⚙️ 환경 설정
@@ -283,6 +305,8 @@ docker run -p 8000:8000 vybz-follow-service
 
 -   `application.yml`: 기본 설정
 -   `application-dev.yml`: 개발 환경 설정
+-   `application-db.yml`: 데이터베이스 설정
+-   `firebase-adminsdk.json`: Firebase Admin SDK 설정
 
 ### 환경 변수
 
@@ -300,18 +324,34 @@ spring:
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
 
+# Redis 설정
+spring:
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
 # Kafka 설정
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+
+# Firebase 설정
+firebase:
+  config-path: classpath:firebase-adminsdk.json
+
+# FCM 설정
+fcm:
+  base-url: ${FCM_BASE_URL}
 ```
 
 ## 🏗️ 아키텍처
 
 ### Hexagonal Architecture (Clean Architecture)
 
--   **Domain Layer**: 팔로우 도메인 모델과 비즈니스 로직
--   **Application Layer**: 팔로우 서비스 로직과 유스케이스
+-   **Domain Layer**: 알림, FCM 도메인 모델과 비즈니스 로직
+-   **Application Layer**: 알림, FCM 서비스 로직과 유스케이스
 -   **Infrastructure Layer**: MongoDB/MySQL 접근과 외부 시스템 연동
 -   **Presentation Layer**: REST API 엔드포인트
 
@@ -320,24 +360,30 @@ spring:
 -   **Service Discovery**: Eureka Client를 통한 서비스 등록
 -   **Stateless**: 상태 없는 서비스 설계
 -   **API Gateway**: 통합 API 게이트웨이 연동
+-   **Feign Client**: 다른 서비스와의 HTTP 통신
 
 ### 이벤트 기반 아키텍처
 
--   **Kafka Producer**: 팔로우 관련 이벤트 발행
--   **Kafka Consumer**: 다른 서비스의 이벤트 수신 및 처리
+-   **Kafka Consumer**: 다른 서비스의 이벤트 수신 및 알림 생성
 -   **비동기 통신**: 서비스 간 느슨한 결합
 -   **이벤트 타입**:
-    -   FollowEvent (팔로우 생성)
-    -   UnfollowEvent (팔로우 삭제)
-    -   FollowerEvent (팔로워 정보 업데이트)
-    -   FollowingEvent (팔로잉 정보 업데이트)
+    -   ChatNotificationEvent (채팅 메시지 알림)
+    -   FollowNotificationEvent (팔로우 알림)
+    -   NotificationEvent (일반 알림)
 
 ### 데이터베이스 설계
 
--   **MongoDB**: 팔로우 관계 Read Model 저장
--   **MySQL**: 팔로우 관계 Write Model 저장
+-   **MongoDB**: 알림 데이터 Read Model 저장
+-   **MySQL**: 알림 데이터 Write Model 저장
+-   **Redis**: 캐싱 및 세션 관리
 -   **Auditing**: 생성/수정 시간 자동 관리
 -   **인덱스**: 성능 최적화를 위한 인덱스 설정
+
+### 푸시 알림 아키텍처
+
+-   **Firebase Cloud Messaging**: 실시간 푸시 알림 전송
+-   **FCM 토큰 관리**: 사용자별 FCM 토큰 저장 및 관리
+-   **알림 타입별 처리**: 다양한 알림 타입에 따른 차별화된 처리
 
 ### 공통 모듈
 
@@ -345,7 +391,10 @@ spring:
 -   **BaseException**: 체계적인 예외 처리
 -   **SwaggerConfig**: API 문서화 설정
 -   **MongoConfig**: MongoDB 설정
+-   **FirebaseConfig**: Firebase 설정
 -   **CursorPageUtil**: 커서 기반 페이징 유틸리티
+-   **FcmSenderUtil**: FCM 전송 유틸리티
+-   **NotificationContentFormatter**: 알림 내용 포맷팅 유틸리티
 
 ## 🔧 개발 가이드
 
@@ -364,16 +413,29 @@ spring:
 
 ### Kafka 이벤트 처리
 
--   **Producer**: 팔로우 관련 이벤트 발행
--   **Consumer**: 다른 서비스의 이벤트 수신 및 처리
--   **이벤트 타입**: 다양한 팔로우 관련 이벤트
--   **비동기 처리**: 이벤트 기반 비동기 데이터 처리
+-   **Consumer**: 다른 서비스의 이벤트 수신 및 알림 생성
+-   **이벤트 타입**: 다양한 알림 관련 이벤트
+-   **비동기 처리**: 이벤트 기반 비동기 알림 처리
+-   **Bulk 처리**: 대량 이벤트 처리 최적화
 
 ### 페이징 처리
 
 -   **커서 기반 페이징**: 효율적인 대용량 데이터 처리
 -   **CursorPageUtil**: 커서 기반 페이징 유틸리티
 -   **MongoCursorPageHelper**: MongoDB 커서 페이징 헬퍼
+
+### FCM 푸시 알림
+
+-   **토큰 관리**: 사용자별 FCM 토큰 저장 및 업데이트
+-   **알림 전송**: Firebase Cloud Messaging을 통한 실시간 푸시 알림
+-   **알림 타입별 처리**: 다양한 알림 타입에 따른 차별화된 처리
+
+### 외부 서비스 연동
+
+-   **Feign Client**: 다른 마이크로서비스와의 HTTP 통신
+-   **User Info Service**: 사용자 정보 조회
+-   **Busker Info Service**: 버스커 정보 조회
+-   **Bulk 조회**: 대량 데이터 조회 최적화
 
 ### 테스트
 
@@ -407,4 +469,4 @@ spring:
 
 ---
 
-**VYBZ Follow Service** - 효율적인 팔로우 관계 관리 서비스
+**VYBZ Notification Service** - 실시간 알림 및 푸시 메시지 관리 서비스
